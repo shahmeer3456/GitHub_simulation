@@ -115,6 +115,103 @@ public:
         }
     }
 
+    // Function to delete a repository
+    void deleteRepository(string repoName) {
+        root = deleteRepositoryHelper(root, repoName);
+    }
+
+    // Helper function to delete a repository
+    RepositoryNode* deleteRepositoryHelper(RepositoryNode* node, string repoName) {
+        if (node == nullptr) return nullptr;
+        if (repoName < node->name) {
+            node->left = deleteRepositoryHelper(node->left, repoName);
+        }
+        else if (repoName > node->name) {
+            node->right = deleteRepositoryHelper(node->right, repoName);
+        }
+        else {
+            if (node->left == nullptr) {
+                RepositoryNode* temp = node->right;
+                delete node;
+                return temp;
+            }
+            else if (node->right == nullptr) {
+                RepositoryNode* temp = node->left;
+                delete node;
+                return temp;
+            }
+            RepositoryNode* temp = minValueNode(node->right);
+            node->name = temp->name;
+            node->right = deleteRepositoryHelper(node->right, temp->name);
+        }
+        return node;
+    }
+
+    // Function to find the repository node with the minimum value
+    RepositoryNode* minValueNode(RepositoryNode* node) {
+        RepositoryNode* current = node;
+        while (current->left != nullptr) {
+            current = current->left;
+        }
+        return current;
+    }
+
+    // Function to add a commit to a repository
+    void commitToRepository(string repoName, string commitMsg) {
+        RepositoryNode* repo = searchRepository(root, repoName);
+        if (repo != nullptr) {
+            addCommit(repo, commitMsg);
+            cout << "Commit added to repository '" << repoName << "'." << endl;
+        }
+        else {
+            cout << "Repository not found!" << endl;
+        }
+    }
+
+    // Function to add a file to a repository
+    void addFileToRepository(string repoName, string filename) {
+        RepositoryNode* repo = searchRepository(root, repoName);
+        if (repo != nullptr) {
+            addFile(repo, filename);
+            cout << "File '" << filename << "' added to repository '" << repoName << "'." << endl;
+        }
+        else {
+            cout << "Repository not found!" << endl;
+        }
+    }
+
+    // Function to display all commits of a repository
+    void displayCommits(string repoName) {
+        RepositoryNode* repo = searchRepository(root, repoName);
+        if (repo != nullptr) {
+            cout << "Commits for repository '" << repoName << "':" << endl;
+            CommitNode* commitPtr = repo->commitsHead;
+            while (commitPtr != nullptr) {
+                cout << "- " << commitPtr->message << endl;
+                commitPtr = commitPtr->next;
+            }
+        }
+        else {
+            cout << "Repository not found!" << endl;
+        }
+    }
+
+    // Function to search for a repository node by name
+    RepositoryNode* searchRepository(RepositoryNode* node, string repoName) {
+        if (node == nullptr || node->name == repoName) {
+            return node;
+        }
+        if (repoName < node->name) {
+            return searchRepository(node->left, repoName);
+        }
+        else {
+            return searchRepository(node->right, repoName);
+        }
+    }
+};
+
+
+
 int main()
 {
 
