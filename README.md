@@ -27,4 +27,14 @@ Install the official C++ extension provided by Microsoft.
 
 Github_Simulation Project Snapshots:
 Loading console screen:
+![alt text](image.png)
+
+Welcome:
+![alt text](image-1.png)
+
+main menu:
+![alt text](image-2.png)
+
+Repository menu:
+![alt text](image-3.png)
 
